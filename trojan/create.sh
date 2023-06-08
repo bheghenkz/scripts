@@ -12,20 +12,20 @@ TLS="443"
 # shellcheck disable=SC2002
 NTLS="80"
 UUID=$(cat /proc/sys/kernel/random/uuid)
-TROJAN_LINK_TLS="trojan://${UUID}@${DOMAIN}:${TLS}?path=%2Ftrojan-ws&security=tls&host=${DOMAIN}&type=ws&sni=${DOMAIN}#${USERNAME}"
-TROJAN_LINK_GRPC="trojan://${UUID}@${DOMAIN}:${TLS}?mode=gun&security=tls&type=grpc&serviceName=trojan-grpc&sni=bug.com#${USERNAME}"
-TROJAN_LINK_NTLS="trojan://${UUID}@${DOMAIN}:${NTLS}?path=%2Ftrojan-ws&security=none&host=${DOMAIN}&type=ws#${USERNAME}"
+TROJAN_LINK_TLS="trojan://${UUID}@${DOMAIN}:${TLS}?path=/trojan&security=tls&host=${DOMAIN}&type=ws&sni=${DOMAIN}#${USERNAME}"
+TROJAN_LINK_GRPC="trojan://${UUID}@${DOMAIN}:${TLS}?security=tls&encryption=none&type=grpc&serviceName=trojan-grpc&sni=${DOMAIN}#${USERNAME}"
+TROJAN_LINK_NTLS="trojan://${UUID}@${DOMAIN}:${NTLS}?path=/trojan&security=none&host=${DOMAIN}&type=ws#${USERNAME}"
 
 # shellcheck disable=SC2027
 # shellcheck disable=SC2086
 # shellcheck disable=SC1004
 sed -i '/#trojan$/a\#& '"$USERNAME $EXPIRED_AT"'\
-},{"password": "'""${UUID}""'","email": "'""${USERNAME}""'"' /etc/xray/config.json
+},{"password": "'""${UUID}""'","email": "'""${USERNAME}""'"' /usr/local/etc/xray/config.json
 # shellcheck disable=SC2027
 # shellcheck disable=SC2086
 # shellcheck disable=SC1004
 sed -i '/#trojan-grpc$/a\#& '"$USERNAME $EXPIRED_AT"'\
-},{"password": "'""${UUID}""'","email": "'""${USERNAME}""'"' /etc/xray/config.json
+},{"password": "'""${UUID}""'","email": "'""${USERNAME}""'"' /usr/local/etc/xray/config.json
 
 systemctl restart xray > /dev/null 2>&1
 
