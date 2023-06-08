@@ -5,4 +5,4 @@ EXPIRED_AT=$2
 
 sed -i "/^#& ${USERNAME} ${EXPIRED_AT}/,/^},{/d" /usr/local/etc/xray/config.json
 
-systemctl restart xray > /dev/null 2>&1
+systemctl restart xray
