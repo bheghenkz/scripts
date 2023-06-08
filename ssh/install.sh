@@ -2,10 +2,10 @@
 
 echo "[SSH][Step 1/4] Downloading scripts..."
 
-curl -sS DOMAIN/scripts/ssh/create.sh --output /usr/bin/ssh-create-account
-curl -sS DOMAIN/scripts/ssh/renew.sh --output /usr/bin/ssh-renew-account
-curl -sS DOMAIN/scripts/ssh/password.sh --output /usr/bin/ssh-password-account
-curl -sS DOMAIN/scripts/ssh/delete.sh --output /usr/bin/ssh-delete-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/ssh/create.sh --output /usr/bin/ssh-create-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/ssh/renew.sh --output /usr/bin/ssh-renew-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/ssh/password.sh --output /usr/bin/ssh-password-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/ssh/delete.sh --output /usr/bin/ssh-delete-account
 
 echo "[SSH][Step 2/4] Scripts has been successfully downloaded"
 
