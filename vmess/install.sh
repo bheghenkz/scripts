@@ -4,9 +4,9 @@ sudo apt install jq -y
 
 echo "[VMESS][Step 1/4] Downloading scripts..."
 
-curl -sS DOMAIN/scripts/vmess/create.sh --output /usr/bin/vmess-create-account
-curl -sS DOMAIN/scripts/vmess/renew.sh --output /usr/bin/vmess-renew-account
-curl -sS DOMAIN/scripts/vmess/delete.sh --output /usr/bin/vmess-delete-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/vmess/create.sh --output /usr/bin/vmess-create-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/vmess/renew.sh --output /usr/bin/vmess-renew-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/vmess/delete.sh --output /usr/bin/vmess-delete-account
 
 echo "[VMESS][Step 2/4] Scripts has been successfully downloaded"
 

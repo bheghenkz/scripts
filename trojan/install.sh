@@ -2,9 +2,9 @@
 
 echo "[TROJAN][Step 1/4] Downloading scripts..."
 
-curl -sS DOMAIN/scripts/trojan/create.sh --output /usr/bin/trojan-create-account
-curl -sS DOMAIN/scripts/trojan/renew.sh --output /usr/bin/trojan-renew-account
-curl -sS DOMAIN/scripts/trojan/delete.sh --output /usr/bin/trojan-delete-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/trojan/create.sh --output /usr/bin/trojan-create-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/renew.sh --output /usr/bin/trojan-renew-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/delete.sh --output /usr/bin/trojan-delete-account
 
 echo "[TROJAN][Step 2/4] Scripts has been successfully downloaded"
 

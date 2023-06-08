@@ -2,9 +2,9 @@
 
 echo "[VLESS][Step 1/4] Downloading scripts..."
 
-curl -sS DOMAIN/scripts/vless/create.sh --output /usr/bin/vless-create-account
-curl -sS DOMAIN/scripts/vless/renew.sh --output /usr/bin/vless-renew-account
-curl -sS DOMAIN/scripts/vless/delete.sh --output /usr/bin/vless-delete-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/vless/create.sh --output /usr/bin/vless-create-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/vless/renew.sh --output /usr/bin/vless-renew-account
+curl -sS https://raw.githubusercontent.com/bheghenkz/scripts/main/vless/delete.sh --output /usr/bin/vless-delete-account
 
 echo "[VLESS][Step 2/4] Scripts has been successfully downloaded"
 
