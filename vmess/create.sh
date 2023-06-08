@@ -3,31 +3,33 @@
 USERNAME=$1
 EXPIRED_AT=$2
 
-source /var/lib/ipvps.conf
+source /var/lib/dnsvps.conf
 
-if [[ "$IP" = "" ]]; then
-    DOMAIN=$(cat /etc/xray/domain)
+if [[ "$DNS" = "" ]]; then
+    DOMAIN=$(cat /usr/local/etc/xray/domain)
 else
-    DOMAIN=$IP
+    DOMAIN=$DNS
 fi
 
+ISP=$(cat /usr/local/etc/xray/org)
+CITY=$(cat /usr/local/etc/xray/city)
 # shellcheck disable=SC2002
-TLS="$(cat ~/log-install.txt | grep -w "Vmess WS TLS" | cut -d: -f2 | sed 's/ //g')"
+TLS="443"
 # shellcheck disable=SC2002
-NTLS="$(cat ~/log-install.txt | grep -w "Vmess WS none TLS" | cut -d: -f2 | sed 's/ //g')"
+NTLS="80"
 UUID=$(cat /proc/sys/kernel/random/uuid)
 
 
 # shellcheck disable=SC2027
 # shellcheck disable=SC2086
 # shellcheck disable=SC1004
-sed -i '/#vmess$/a\### '"${USERNAME} ${EXPIRED_AT}"'\
-},{"id": "'""${UUID}""'","alterId": '"0"',"email": "'""${USERNAME}""'"' /etc/xray/config.json
+sed -i '/#vmess$/a\#@ '"${USERNAME} ${EXPIRED_AT}"'\
+},{"id": "'""${UUID}""'","alterId": '"0"',"email": "'""${USERNAME}""'"' /usr/local/etc/xray/config.json
 # shellcheck disable=SC2027
 # shellcheck disable=SC2086
 # shellcheck disable=SC1004
-sed -i '/#vmessgrpc$/a\### '"${USERNAME} ${EXPIRED_AT}"'\
-},{"id": "'""${UUID}""'","alterId": '"0"',"email": "'""${USERNAME}""'"' /etc/xray/config.json
+sed -i '/#vmess-grpc$/a\#@ '"${USERNAME} ${EXPIRED_AT}"'\
+},{"id": "'""${UUID}""'","alterId": '"0"',"email": "'""${USERNAME}""'"' /usr/local/etc/xray/config.json
 
 
 JSON_TLS=$(jq -n \
@@ -39,7 +41,7 @@ JSON_NTLS=$(jq -n \
     --arg username "${USERNAME}" \
     --arg domain "${DOMAIN}" \
     --arg uuid "${UUID}" \
-    '{v: "2", ps: $username, add: $domain, port: "80", id: $uuid, aid: "0", net: "ws", path: "/vmess", type: "none", host: "", tls: "tls"}')
+    '{v: "2", ps: $username, add: $domain, port: "80", id: $uuid, aid: "0", net: "ws", path: "/vmess", type: "none", host: "", tls: "none"}')
 JSON_GRPC=$(jq -n \
     --arg username "${USERNAME}" \
     --arg domain "${DOMAIN}" \
@@ -57,16 +59,20 @@ echo "━━━━━━━━━━━━━━━━━━━━━━━━�
 echo "        Vmess Account"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Remarks        : ${USERNAME}"
+echo "ISP            : ${ISP}"
+echo "City           : ${CITY}"
 echo "Domain         : ${DOMAIN}"
 echo "Wildcard       : (bug.com).${DOMAIN}"
 echo "Port TLS       : ${TLS}"
 echo "Port none TLS  : ${NTLS}"
 echo "Port gRPC      : ${TLS}"
+echo "Alt Port TLS   : 2053, 2083, 2087, 2096, 8443"
+echo "Alt Port NTLS  : 8080, 8880, 2052, 2082, 2086, 2095"
 echo "id             : ${UUID}"
 echo "alterId        : 0"
 echo "Security       : auto"
 echo "Network        : ws"
-echo "Path           : /vmess"
+echo "Path           : /(multipath) • ubah suka-suka"
 echo "ServiceName    : vmess-grpc"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Link TLS       : ${VMESS_LINK_TLS}"
