@@ -3,33 +3,35 @@
 USERNAME=$1
 EXPIRED_AT=$2
 
-source /var/lib/ipvps.conf
+source /var/lib/dnsvps.conf
 
-if [[ "$IP" = "" ]]; then
-    DOMAIN=$(cat /etc/xray/domain)
+if [[ "$DNS" = "" ]]; then
+    DOMAIN=$(cat /usr/local/etc/xray/domain)
 else
-    DOMAIN=$IP
+    DOMAIN=$DNS
 fi
 
+ISP=$(cat /usr/local/etc/xray/org)
+CITY=$(cat /usr/local/etc/xray/city)
 # shellcheck disable=SC2002
-TLS="$(cat ~/log-install.txt | grep -w "Vless WS TLS" | cut -d: -f2 | sed 's/ //g')"
+TLS="443"
 # shellcheck disable=SC2002
-NTLS="$(cat ~/log-install.txt | grep -w "Vless WS none TLS" | cut -d: -f2 | sed 's/ //g')"
+NTLS="80"
 UUID=$(cat /proc/sys/kernel/random/uuid)
-VLESS_LINK_TLS="vless://${UUID}@${DOMAIN}:${TLS}?path=/vless&security=tls&encryption=none&type=ws#${USERNAME}"
-VLESS_LINK_NTLS="vless://${UUID}@${DOMAIN}:${NTLS}?path=/vless&encryption=none&type=ws#${USERNAME}"
-VLESS_LINK_GRPC="vless://${UUID}@${DOMAIN}:${TLS}?mode=gun&security=tls&encryption=none&type=grpc&serviceName=vless-grpc&sni=bug.com#${USERNAME}"
+VLESS_LINK_TLS="vless://${UUID}@${DOMAIN}:${TLS}?path=/vless&security=tls&encryption=none&host=${DOMAIN}&type=ws&sni=${DOMAIN}#${USERNAME}"
+VLESS_LINK_NTLS="vless://${UUID}@${DOMAIN}:${NTLS}?path=/vless&security=none&encryption=none&host=${DOMAIN}&type=ws#${USERNAME}"
+VLESS_LINK_GRPC="vless://${UUID}@${DOMAIN}:${TLS}?security=tls&encryption=none&type=grpc&serviceName=vless-grpc&sni=${DOMAIN}#${USERNAME}"
 
 # shellcheck disable=SC2027
 # shellcheck disable=SC2086
 # shellcheck disable=SC1004
-sed -i '/#vless$/a\#& '"${USERNAME} ${EXPIRED_AT}"'\
-},{"id": "'""${UUID}""'","email": "'""${USERNAME}""'"' /etc/xray/config.json
+sed -i '/#vless$/a\#= '"${USERNAME} ${EXPIRED_AT}"'\
+},{"id": "'""${UUID}""'","email": "'""${USERNAME}""'"' /usr/local/etc/xray/config.json
 # shellcheck disable=SC2027
 # shellcheck disable=SC2086
 # shellcheck disable=SC1004
-sed -i '/#vlessgrpc$/a\#& '"${USERNAME} ${EXPIRED_AT}"'\
-},{"id": "'""${UUID}""'","email": "'""${USERNAME}""'"' /etc/xray/config.json
+sed -i '/#vless-grpc$/a\#= '"${USERNAME} ${EXPIRED_AT}"'\
+},{"id": "'""${UUID}""'","email": "'""${USERNAME}""'"' /usr/local/etc/xray/config.json
 
 systemctl restart xray > /dev/null 2>&1
 
@@ -38,6 +40,8 @@ echo "        Vless Account"
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "Remarks        : ${USERNAME}"
 echo "Domain         : ${DOMAIN}"
+echo "ISP            : ${ISP}"
+echo "City           : ${CITY}"
 echo "Wildcard       : (bug.com).${DOMAIN}"
 echo "Port TLS       : ${TLS}"
 echo "Port none TLS  : ${NTLS}"
